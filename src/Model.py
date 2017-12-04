@@ -27,7 +27,7 @@ class Model:
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
     def get_var(self, name):
-        return self.variables[int(name[1])]  # TODO np search var name
+        return self.variables[int(name[1])]
 
     def arc_consistency(self, alg):
         if alg == '3':

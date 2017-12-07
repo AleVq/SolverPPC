@@ -1,5 +1,6 @@
 import numpy as np
 from src.Variable import Variable
+from src.AC3 import AC3
 import abc
 
 
@@ -14,7 +15,4 @@ class Constraint:
     @abc.abstractmethod
     def filter_from(self, x):
         # applying filtering alg
-        if x.is_delta_empty():
-            return False
-
-
+        pass

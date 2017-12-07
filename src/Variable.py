@@ -4,11 +4,11 @@ from src.Propagation import Propagation
 
 class Variable:
     # domain: list, delta: np arrays
-    def __init__(self, name, domain, delta, propagation):
+    def __init__(self, name, domain, propagation):
         self.name = name
         self.domain = np.array(domain)
         self.domain_type = self.domain.dtype.name
-        self.delta = delta
+        self.delta = []
         self.propagation = propagation
         # list of couples <constraintType, variable>
         self.constraints = np.array([[]])

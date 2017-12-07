@@ -1,7 +1,7 @@
 from src.Constraint import Constraint
 from src.Variable import Variable
 from src.Propagation import Propagation
-from src.ArcConsistencyAlgorithms import ArcConsistencyAlgorithms
+from src.AC3 import AC3
 import numpy as np
 
 
@@ -19,7 +19,7 @@ class Model:
 
     # domain, delta: list
     def add_var(self, name, domain):
-        self.variables = np.append(self.variables, Variable(name, np.array(domain), np.array([]), self.propagation))
+        self.variables = np.append(self.variables, Variable(name, np.array(domain), self.propagation))
 
     # x, y: Variable, type: String
     def add_constr(self, x, y, type):
@@ -31,30 +31,32 @@ class Model:
 
     def arc_consistency(self, alg):
         if alg == '3':
-            self.variables = ArcConsistencyAlgorithms.ac3(self.variables, self.constraints, self.propagation)
-        elif alg == '4':
-            self.variables = ArcConsistencyAlgorithms.ac4(self.variables, self.constraints, self.propagation)
-        for var in self.variables:
-            print(str(var.name) + "'s domain: " + str(var.domain))
-
+            ac3 = AC3()
+            prop = Propagation()
+            self.variables = prop.run(self.variables, self.constraints, self.propagation)
+        # elif alg == '4':
+        #    self.variables = AC4.ac4(self.variables, self.constraints, self.propagation)
+        #for var in self.variables:
+        #    print(str(var.name) + "'s domain: " + str(var.domain))
 
 
 if __name__ == '__main__':
     m = Model()
-    '''
     m.add_var('x'+str(0), list(range(1,14)))
     m.add_var('x'+str(1), list(range(5,16)))
-    m.add_var('x'+str(2), list(range(11,35)))
-    m.add_var('x'+str(3), list(range(5,65)))'''
+    m.add_var('x'+str(2), list(range(11,16)))
+    m.add_var('x'+str(3), list(range(5,65)))
+    '''
     m.add_var('x'+str(0), list(char_range('a','e')))
     m.add_var('x'+str(1), list(char_range('d','p')))
     m.add_var('x'+str(2), list(char_range('k','t')))
     m.add_var('x'+str(3), list(char_range('n','z')))
+    '''
     x = m.get_var('x0')
     y = m.get_var('x1')
     z = m.get_var('x2')
     t = m.get_var('x3')
-    m.add_constr(x, y, '!=')
-    m.add_constr(z, t, '>')
+    m.add_constr(x, y, '>')
+    m.add_constr(z, t, '!=')
     m.add_constr(y, z, '<')
     m.arc_consistency('3')

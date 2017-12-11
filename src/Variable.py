@@ -19,11 +19,11 @@ class Variable:
         return False
 
     def remove_value(self, a):
-        # removing value a from domain
-        self.domain = np.delete(self.domain, np.argwhere(self.domain == a))
         if self.is_in_domain(a):
             self.delta = np.append(self.delta, a)
-            self.propagation.add_to_queue(self, a)
+            self.propagation.add_to_queue(self)
+        # removing value a from domain
+        self.domain = np.delete(self.domain, np.argwhere(self.domain == a))
 
     def is_delta_empty(self):
         if self.delta.size == 0:

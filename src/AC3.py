@@ -1,3 +1,6 @@
+from src.Constraint import Constraint
+
+
 def consistent(x, y, type):
     if type == '!=':
         return x != y
@@ -21,8 +24,8 @@ def revise(x, y, type):
     return deleted
 
 
-class AC3:
-    # vars, constraints: numpy array
+class AC3():    # vars, constraints: numpy array
+
     def ac3(self, variables, constraints, prop):
         for c in constraints:
             prop.add_to_queue(c)
@@ -33,7 +36,3 @@ class AC3:
                     if c1.y.name == c.x.name:
                         prop.queue.enqueue(c1)
         return variables
-
-
-    # vars, constraints: numpy array
-   # def ac4(variables, constraints, prop):

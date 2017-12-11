@@ -14,8 +14,6 @@ class AC3(Constraint):
 
     # var: Variable, revise method of AC3
     def filter_from(self, var):
-        if var.name == 'x2':
-            print()
         if var == self.x:
             x = self.x
             y = self.y

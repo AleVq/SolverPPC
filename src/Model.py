@@ -36,19 +36,17 @@ class Model:
 
     # lab: list, unlab, cons: np array
     # lab = vars with fixed value
-    def backtrack(self, lab, unlab, cons):  # unlab = queue of Regin's propagation, lab = fixed-valued vars
+    def backtrack(self, lab, unlab, cons):
         if unlab.shape[0] == 0:
             return lab
         x = unlab[0]
         # iterate over all values of x
         for v in x.domain:
-            # domain = x.domain
             x.domain = np.array([v])
             self.filter_all()
             new_lab = lab.copy()
             new_lab.append(x)
             result = self.backtrack(new_lab, np.delete(unlab, 0), cons)
-            # x.domain = np.setdiff1d(domain, v)
             if len(result) != 0:
                 return result
         return []  # all values are inconsistent, must go back
@@ -67,10 +65,12 @@ if __name__ == '__main__':
     m.add_constr(x0, x1, '<')
     m.add_constr(x1, x2, '>')
     m.add_constr(x2, x3, '<')
-    m.add_constr(x0, x3, '>')
+    #dm.add_constr(x0, x3, '>')
     vars_domain = m.filter_all()
+    print('Filtered domains:')
     for var in vars_domain:
         print(str(var.name) + "'s domain: " + str(var.domain))
     vars_sol = m.find_solution()
+    print('Proposed solution:')
     for var in vars_sol:
         print(str(var.name) + "'s value: " + str(var.domain))

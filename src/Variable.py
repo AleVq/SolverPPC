@@ -32,10 +32,3 @@ class Variable:
 
     def reset_delta(self):
         self.delta = np.array([])
-
-
-if __name__ == '__main__':
-    prop = Propagation()
-    x = Variable(list(range(1,9)), [], prop)
-    y = Variable(list(range(5,15)), [], prop)
-    print('')

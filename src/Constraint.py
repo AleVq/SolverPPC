@@ -2,7 +2,11 @@ import numpy as np
 import abc
 
 
-def consistent(x, y, type):
+def consistent(x, y, expr):
+    return eval(expr)
+
+
+def consistent_old(x, y, type):
     if type == '!=':
         return x != y
     elif type == '<':

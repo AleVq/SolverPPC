@@ -23,10 +23,10 @@ class Propagation:
     def pick_in_queue(self):
         return self.queue.dequeue()
 
-    # return False if there are no feasible solutions,
-    # return True otherwise
-    def run(self, var):
-        self.add_to_queue(var)
+    # return True if there are feasible solutions,
+    # return False otherwise
+    def run(self, vars):
+        self.queue.enqueue(vars)
         while not self.queue.is_empty():
             x = self.pick_in_queue()
             for c in self.constr_graph[x.name]:
@@ -67,7 +67,7 @@ class Queue:
     def size(self):
         return self.__queue.shape[0]
 
-    def to_string(self):
+    def print_queue(self):
         for v in self.__queue:
             sys.stdout.write(str(v.name) + ' ')
         print()

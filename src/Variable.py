@@ -5,10 +5,10 @@ from src.Propagation import Propagation
 class Variable:
     # domain: list, delta: np arrays
     def __init__(self, name, domain, propagation):
+        self.label = 0
         self.name = name
         self.domain = np.array(domain)
-        self.domain_type = self.domain.dtype.name
-        self.delta = []
+        self.delta = np.array([]).astype(int)
         self.propagation = propagation
         # list of couples <constraintType, variable>
         self.constraints = np.array([[]])
@@ -26,7 +26,7 @@ class Variable:
         self.domain = np.delete(self.domain, np.argwhere(self.domain == a))
 
     def is_delta_empty(self):
-        if self.delta.size == 0:
+        if len(self.delta) == 0:
             return True
         return False
 

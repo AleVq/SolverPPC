@@ -1,4 +1,11 @@
 from src.Constraint import Constraint
+import sys
+import numpy as np
+
+
+def print_domains(c):
+    print(str(c.x.name) + ' domain ' + str(c.x.domain))
+    print(str(c.y.name) + ' domain ' + str(c.y.domain))
 
 
 def consistent(x, y, expr):
@@ -74,3 +81,55 @@ class AC4(Constraint):
                 if counter[str(x.name)+', '+str(v)] == 0:
                     x.remove_value(v)
         return pairs
+
+
+class AC6(Constraint):
+
+    def __init__(self, x, y, type, table=None):
+        super(AC6, self).__init__(x, y, type, table)
+        self.values_pairs = self.initialize()
+
+    def initialize(self):
+        pairs = {}  # dict of couples: {'x, v': int}
+        for x in [self.x, self.y]:
+            for v in x.domain:
+                pairs[str(x.name)+', '+str(v)] = []
+                if x == self.x:
+                    y = self.y
+                    inverse = False
+                else:
+                    y = self.x
+                    inverse = True
+                supported = False
+                for w in y.domain:
+                    if inverse and consistent(w, v, self.type):
+                        pairs[str(x.name) + ', ' + str(v)].append([y, w])
+                        supported = True
+                        break
+                    if consistent(v, w, self.type) and not inverse:
+                        pairs[str(x.name) + ', ' + str(v)].append([y, w])
+                        supported = True
+                        break
+                if not supported:
+                    x.remove_value(v)
+        return pairs
+
+    def filter_from(self, x):
+        for a in x.delta:
+            key = str(x.name) + ', ' + str(a)
+            if key in self.values_pairs.keys():
+                for couple in self.values_pairs[key]:
+                    new_support = self.exists_support(x, a, couple[0], couple[1])  # new_support: couple [x,c]
+                    if new_support is None:
+                        couple[0].remove_value(couple[1])
+                    else:
+                        key_ns = str(new_support[0].name) + ', ' + str(new_support[1])
+                        if not couple in self.values_pairs[key_ns]:
+                            self.values_pairs[key_ns].append(couple)
+
+    def exists_support(self, x, a, y, b):
+        for v in x.domain:
+            # we know that y = c.x, x = c.y
+            if v != a and consistent(b, v, self.type):
+                return [x, v]
+        return None

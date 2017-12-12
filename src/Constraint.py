@@ -29,8 +29,8 @@ class Constraint:
     # x,y: Variable, type: char
     def __init__(self, x, y, type, table=None):
         self.table = table
-        # if self.table is None:
-        #     self.table = make_table(x, y, type)
+        if self.table is None:
+            self.table = make_table(x, y, type)
         self.x = x
         self.y = y
         self.type = type

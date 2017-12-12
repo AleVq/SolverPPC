@@ -3,6 +3,7 @@ from src.Variable import Variable
 from src.Propagation import Propagation
 from src.AC import AC3
 from src.AC import AC4
+from src.AC import AC6
 import numpy as np
 from src.Propagation import Queue
 from src.AC import consistent
@@ -33,6 +34,8 @@ class Model:
             self.constraints = np.append(self.constraints, AC3(x, y, type))
         elif m.alg_ac == 4:
             self.constraints = np.append(self.constraints, AC4(x, y, type))
+        elif self.alg_ac == 6:
+            self.constraints = np.append(self.constraints, AC6(x, y, type))
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
     def get_var(self, name):
@@ -64,7 +67,6 @@ class Model:
                 if len(result) != 0:
                     return result
             else:
-                print('falsooooooo')
                 self.variables = backup_vars
         return []  # all values are inconsistent, must go back
 
@@ -83,20 +85,17 @@ class Model:
 
 
 if __name__ == '__main__':
-    for x in range(3,5):
-        print('AC' + str(x))
+    for x in [3,4,6]:
+        print('AC' + str(x) + ':')
         m = Model(x)
         x0 = m.add_var(list(range(1,14)))
         x1 = m.add_var(list(range(5,16)))
         x2 = m.add_var(list(range(11,16)))
         x3 = m.add_var(list(range(5,25)))
-        #m.add_constr(x0, x1, '<')
-        #m.add_constr(x1, x2, '>')
-        #m.add_constr(x2, x3, '<')
         m.add_constr(x0, x1, 'x < (y-4)')
         m.add_constr(x1, x2, 'x > y')
         m.add_constr(x2, x3, 'x < y')
-        #m.add_constr(x0, x3, '>')
+        m.add_constr(x0, x3, 'x != y')
         '''
         n = 8
         for i in range(n):

@@ -6,15 +6,6 @@ def consistent(x, y, expr):
     return eval(expr)
 
 
-def consistent_old(x, y, type):
-    if type == '!=':
-        return x != y
-    elif type == '<':
-        return x < y
-    elif type == '>':
-        return x > y
-
-
 # x,y: Variable, type: String
 def make_table(x, y, type):
     result = np.zeros((x.domain.shape[0], y.domain.shape[0]))

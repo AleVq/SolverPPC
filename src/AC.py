@@ -3,6 +3,19 @@ import sys
 import numpy as np
 
 
+# x: in its domain we look for a new support
+# y: its value b needs a new support
+def exists_support(c, x, a, y, b):
+    next_val = np.where(x.domain > a)
+    if len(next_val[0]) > 0:
+        domain = x.domain[next_val[0][0]:]
+        for v in domain:
+                # we know that y = c.x, x = c.y
+            if v != a and consistent(b, v, c.type):
+                return [x, v]
+    return None
+
+
 def print_domains(c):
     print(str(c.x.name) + ' domain ' + str(c.x.domain))
     print(str(c.y.name) + ' domain ' + str(c.y.domain))
@@ -119,7 +132,7 @@ class AC6(Constraint):
             key = str(x.name) + ', ' + str(a)
             if key in self.values_pairs.keys():
                 for couple in self.values_pairs[key]:
-                    new_support = self.exists_support(x, a, couple[0], couple[1])  # new_support: couple [x,c]
+                    new_support = exists_support(self, x, a, couple[0], couple[1])  # new_support: couple [x,c]
                     if new_support is None:
                         couple[0].remove_value(couple[1])
                     else:
@@ -127,9 +140,41 @@ class AC6(Constraint):
                         if not couple in self.values_pairs[key_ns]:
                             self.values_pairs[key_ns].append(couple)
 
-    def exists_support(self, x, a, y, b):
-        for v in x.domain:
-            # we know that y = c.x, x = c.y
-            if v != a and consistent(b, v, self.type):
-                return [x, v]
-        return None
+
+class AC2001(Constraint):
+
+    def filter_from(self, x):
+        for a in x.delta:
+            for i in range(len(self.last)):
+                if self.last[i][2] == x and self.last[i][3] == a:
+                    new_support = exists_support(self, x, a, self.last[i][0], self.last[i][1])
+                    if new_support is None:
+                        self.last[i][0].remove_value(self.last[i][1])
+                    else:
+                        self.last[i][2] == new_support[0]
+                        self.last[i][3] == new_support[1]
+
+    def __init__(self, x, y, type, table=None):
+        super(AC2001, self).__init__(x, y, type, table)
+        self.last = []  # last: dict of type {x, a, y, b}, where <y,b> is the last support of <x,a>
+        self.initialize()
+
+    def initialize(self):
+        for v in self.x.domain:
+            found = False
+            for w in self.y.domain:
+                if consistent(v, w, self.type):
+                    self.last.append([self.x, v, self.y, w])
+                    found = True
+                    break
+            if not found:
+                self.x.remove_value(v)
+        for w in self.y.domain:
+            found = False
+            for v in self.x.domain:
+                if consistent(v, w, self.type):
+                    self.last.append([self.y, w, self.x, v])
+                    found = True
+                    break
+            if not found:
+                self.y.remove_value(w)

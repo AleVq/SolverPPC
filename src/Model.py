@@ -4,6 +4,7 @@ from src.Propagation import Propagation
 from src.AC import AC3
 from src.AC import AC4
 from src.AC import AC6
+from src.AC import AC2001
 import numpy as np
 from src.Propagation import Queue
 from src.AC import consistent
@@ -36,6 +37,8 @@ class Model:
             self.constraints = np.append(self.constraints, AC4(x, y, type))
         elif self.alg_ac == 6:
             self.constraints = np.append(self.constraints, AC6(x, y, type))
+        elif self.alg_ac == 2001:
+            self.constraints = np.append(self.constraints, AC2001(x, y, type))
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
     def get_var(self, name):
@@ -63,7 +66,6 @@ class Model:
                 new_lab = lab.copy()
                 new_lab.append(x)
                 result = self.backtrack(new_lab, np.delete(unlab, 0))
-    #            result = self.backtrack(new_lab, np.delete(unlab, 0), cons)
                 if len(result) != 0:
                     return result
             else:
@@ -83,9 +85,8 @@ class Model:
         return self.propagation.run(self.variables)  # (vars)
 
 
-
 if __name__ == '__main__':
-    for x in [3,4,6]:
+    for x in [3, 4, 6, 2001]:
         print('AC' + str(x) + ':')
         m = Model(x)
         x0 = m.add_var(list(range(1,14)))
@@ -96,6 +97,7 @@ if __name__ == '__main__':
         m.add_constr(x1, x2, 'x > y')
         m.add_constr(x2, x3, 'x < y')
         m.add_constr(x0, x3, 'x != y')
+        m.propagation.queue.print_queue()
         '''
         n = 8
         for i in range(n):

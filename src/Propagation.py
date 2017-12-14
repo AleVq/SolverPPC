@@ -1,5 +1,4 @@
 import numpy as np
-from src.AC3 import consistent
 import sys
 
 
@@ -30,13 +29,8 @@ class Propagation:
         while not self.queue.is_empty():
             x = self.pick_in_queue()
             for c in self.constr_graph[x.name]:
-                if x == c.x:
-                    c.filter_from(c.x)  # returns true if a value has been deleted
-                    c.filter_from(c.y)
-                else:
-                    c.filter_from(c.y)
-                    c.filter_from(c.x)
-                if x.domain.shape[0] == 0:
+                c.filter_from(x) # returns true if a value has been deleted
+                if c.x.domain.shape[0] == 0 or c.y.domain.shape[0] == 0:
                     return False  # one domain is empty, we stop here
             x.reset_delta()
         return True

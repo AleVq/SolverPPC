@@ -1,5 +1,4 @@
 from src.Constraint import Constraint
-import sys
 import numpy as np
 
 
@@ -22,14 +21,15 @@ def print_domains(c):
 
 
 def consistent(x, y, expr):
-    return eval(expr)
+    result = eval(expr)
+    return result
 
 
 class AC3(Constraint):
 
     # var: Variable, revise method of AC3
     def filter_from(self, var):
-        if var == self.x:
+        if var == self.y:
             x = self.x
             y = self.y
         else:

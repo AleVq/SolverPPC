@@ -65,18 +65,22 @@ class Model:
                 break
         domain = x.domain
         for v in domain:
+            bp = []
+            for var in self.variables:
+                bp.append(var.domain)
             x.domain = np.array([v])
             x.delta = np.setdiff1d(domain, [v])
-            bp = self.variables.copy()
-            if self.filter_all():
-                # for v in self.variables:
-                #    print(str(v.name) + ' ' + str(v.domain))
+            feasible = self.filter_all()
+            for v in self.variables:
+               print(str(v.name) + ' ' + str(v.domain))
+            if feasible:
                 result = self.backtrack()
                 if len(result) != 0:
                     return result
-            self.variables = bp
-            for var in self.variables:
-                if var == x:
+            for i in range(self.variables.shape[0]):
+                self.variables[i].domain = bp[i]
+                self.variables[i].reset_delta()
+                if var.name == x.name:
                     var.label = False
         return []  # all values are inconsistent, must go back
 
@@ -85,11 +89,11 @@ class Model:
 
 
 if __name__ == '__main__':
-    for x in [3,4,6, 2001]:
+    for x in [4]:#3, 4, 6, 2001]:
         print('AC' + str(x) + ':')
         m = Model(x)
-        cazzo = 1
-        if cazzo == 0:
+        switch_csp = 1
+        if switch_csp == 0:
             x0 = m.add_var(list(range(1,14)))
             x1 = m.add_var(list(range(5,16)))
             x2 = m.add_var(list(range(11,16)))
@@ -98,12 +102,12 @@ if __name__ == '__main__':
             m.add_constr(x1, x2, 'x > y')
             m.add_constr(x2, x3, 'x < y')
             m.add_constr(x0, x3, 'x != y')
-        elif cazzo == 2:
+        elif switch_csp == 2:
             x0 = m.add_var(list(range(0,4)))
             x1 = m.add_var(list(range(0,4)))
             m.add_constr(x0, x1, 'x+y > 4')
         else:
-            n = 3
+            n = 4
             for i in range(n):
                 m.add_var(list(range(n)))
             for i in range((n-1)):
@@ -113,12 +117,11 @@ if __name__ == '__main__':
                     #m.add_constr(m.variables[i], m.variables[j], "x != (y-"+str(a) + ')')
                     #m.add_constr(m.variables[i], m.variables[j], "x != (y+"+str(a) + ')')
 
-        m.filter_all()
-        vars_domain = m.variables
-        print('Filtered domains:')
-        for var in vars_domain:
-            print(str(var.name) + "'s domain: " + str(var.domain))
-
+        # m.filter_all()
+        # vars_domain = m.variables
+        # print('Filtered domains:')
+        # for var in vars_domain:
+        #    print(str(var.name) + "'s domain: " + str(var.domain))
         vars_sol = m.find_solution()
         print('Proposed solution:')
         for var in vars_sol:

@@ -29,7 +29,7 @@ class Propagation:
         while not self.queue.is_empty():
             x = self.pick_in_queue()
             for c in self.constr_graph[x.name]:
-                c.filter_from(x) # returns true if a value has been deleted
+                c.filter_from(x)  # returns true if a value has been deleted
                 if c.x.domain.shape[0] == 0 or c.y.domain.shape[0] == 0:
                     return False  # one domain is empty, we stop here
             x.reset_delta()

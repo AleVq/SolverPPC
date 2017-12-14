@@ -39,7 +39,7 @@ class AC3(Constraint):
         for v in x.domain:
             consistent_value = False
             for w in y.domain:
-                if var == self.x:
+                if x == self.x:
                     if consistent(v, w, self.type):
                         consistent_value = True
                         break
@@ -69,6 +69,7 @@ class AC4(Constraint):
         self.values_pairs = self.initialize()
 
     def initialize(self):
+        self.values_pairs = {}
         counter = {}  # dict of couples: {'x, v': int}
         pairs = {}
         for x in [self.x, self.y]:
@@ -103,6 +104,7 @@ class AC6(Constraint):
         self.values_pairs = self.initialize()
 
     def initialize(self):
+        self.values_pairs = {}
         pairs = {}  # dict of couples: {'x, v': int}
         for x in [self.x, self.y]:
             for v in x.domain:
@@ -137,6 +139,8 @@ class AC6(Constraint):
                         couple[0].remove_value(couple[1])
                     else:
                         key_ns = str(new_support[0].name) + ', ' + str(new_support[1])
+                        if key_ns == 'x0, 8':
+                            print()
                         if not couple in self.values_pairs[key_ns]:
                             self.values_pairs[key_ns].append(couple)
 
@@ -160,6 +164,7 @@ class AC2001(Constraint):
         self.initialize()
 
     def initialize(self):
+        self.last = []
         for v in self.x.domain:
             found = False
             for w in self.y.domain:

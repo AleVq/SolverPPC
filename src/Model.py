@@ -6,6 +6,7 @@ from src.AC import AC6
 from src.AC import AC2001
 import numpy as np
 from src.Propagation import Queue
+from src.Constraint import Constraint
 
 
 def char_range(c1, c2):
@@ -39,6 +40,16 @@ class Model:
             self.constraints = np.append(self.constraints, AC2001(x, y, type))
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
+    def createConstraint(self, x, y, type):
+        if m.alg_ac == 3:
+            return AC3(x, y, type)
+        elif m.alg_ac == 4:
+            return AC4(x, y, type)
+        elif self.alg_ac == 6:
+            return AC6(x, y, type)
+        elif self.alg_ac == 2001:
+            return AC2001(x, y, type)
+
     def get_var(self, name):
         return self.variables[int(name[1])]
 
@@ -55,7 +66,7 @@ class Model:
 
     # lab: list, unlab, cons: np array
     # lab = vars with fixed value, unlab = vars in queue, cons = constraints
-    def backtrack(self):  # i = index of last var labelled
+    def backtrack(self):
         if self.all_labelled():
             return self.variables
         for var in self.variables:
@@ -65,14 +76,17 @@ class Model:
                 break
         domain = x.domain
         for v in domain:
-            bp = []
-            for var in self.variables:
-                bp.append(var.domain)
+            bp = []  # backup of actual state of vars
+            for variable in self.variables:
+                bp.append(variable.domain)
             x.domain = np.array([v])
             x.delta = np.setdiff1d(domain, [v])
+            if self.alg_ac != 3:
+                for c in self.constraints:
+                    c.initialize()
             feasible = self.filter_all()
-            for v in self.variables:
-               print(str(v.name) + ' ' + str(v.domain))
+            #for value in self.variables:
+            #   print(str(value.name) + ' ' + str(value.domain))
             if feasible:
                 result = self.backtrack()
                 if len(result) != 0:
@@ -82,17 +96,20 @@ class Model:
                 self.variables[i].reset_delta()
                 if var.name == x.name:
                     var.label = False
+            if self.alg_ac != 3:
+                for c in self.constraints:
+                    c.initialize()
         return []  # all values are inconsistent, must go back
 
-    def filter_all(self):
-        return self.propagation.run(self.variables)  # (vars)
+    def filter_all(self, cons=None):
+            return self.propagation.run(self.variables)  # (vars)
 
 
 if __name__ == '__main__':
-    for x in [4]:#3, 4, 6, 2001]:
+    for x in [3, 4, 6, 2001]:
         print('AC' + str(x) + ':')
         m = Model(x)
-        switch_csp = 1
+        switch_csp = 9
         if switch_csp == 0:
             x0 = m.add_var(list(range(1,14)))
             x1 = m.add_var(list(range(5,16)))
@@ -107,7 +124,7 @@ if __name__ == '__main__':
             x1 = m.add_var(list(range(0,4)))
             m.add_constr(x0, x1, 'x+y > 4')
         else:
-            n = 4
+            n = 8
             for i in range(n):
                 m.add_var(list(range(n)))
             for i in range((n-1)):
@@ -117,10 +134,10 @@ if __name__ == '__main__':
                     #m.add_constr(m.variables[i], m.variables[j], "x != (y-"+str(a) + ')')
                     #m.add_constr(m.variables[i], m.variables[j], "x != (y+"+str(a) + ')')
 
-        # m.filter_all()
-        # vars_domain = m.variables
-        # print('Filtered domains:')
-        # for var in vars_domain:
+        #m.filter_all()
+        #vars_domain = m.variables
+        #print('Filtered domains:')
+        #for var in vars_domain:
         #    print(str(var.name) + "'s domain: " + str(var.domain))
         vars_sol = m.find_solution()
         print('Proposed solution:')

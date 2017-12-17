@@ -6,7 +6,8 @@ from src.AC import AC6
 from src.AC import AC2001
 import numpy as np
 from src.Propagation import Queue
-from src.Constraint import Constraint
+import time
+import sys
 
 
 def char_range(c1, c2):
@@ -40,23 +41,21 @@ class Model:
             self.constraints = np.append(self.constraints, AC2001(x, y, type))
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
-    def createConstraint(self, x, y, type):
-        if m.alg_ac == 3:
-            return AC3(x, y, type)
-        elif m.alg_ac == 4:
-            return AC4(x, y, type)
-        elif self.alg_ac == 6:
-            return AC6(x, y, type)
-        elif self.alg_ac == 2001:
-            return AC2001(x, y, type)
-
     def get_var(self, name):
         return self.variables[int(name[1])]
 
     def find_solution(self):
         q = Queue()
         q.enqueue(self.variables)
-        return self.backtrack()
+        start = time.time()
+        result = self.backtrack()
+        end = time.time()
+        print('Time to find solution with backtrack: ' + str(end - start) + ' seconds.')
+        if result == []:
+            print('No feasible solution')
+        else:
+            for variables in result:
+                print(str(variables.name) + " = " + str(variables.domain))
 
     def all_labelled(self):
         res = 0
@@ -85,8 +84,6 @@ class Model:
                 for c in self.constraints:
                     c.initialize()
             feasible = self.filter_all()
-            #for value in self.variables:
-            #   print(str(value.name) + ' ' + str(value.domain))
             if feasible:
                 result = self.backtrack()
                 if len(result) != 0:
@@ -101,46 +98,59 @@ class Model:
                     c.initialize()
         return []  # all values are inconsistent, must go back
 
-    def filter_all(self, cons=None):
+    def filter_all(self):
             return self.propagation.run(self.variables)  # (vars)
 
 
 if __name__ == '__main__':
+    line = input("Do you want to evaluate this solver with the n-queens problem?\n")
+    n = 0
+    # defining n-queens parameters
+    if line[0] == 'y' or line[0] == 'Y':
+        switch_csp = 1
+        while not line.isdigit():
+            # print('how many queens would you like to have?')
+            line = input('how many queens would you like to have? \n')
+            if not line.isdigit():
+                print("please, enter a number")
+        n = int(line)
+        print('Ok, working on ' + line + '-queens problem...')
+    # defining CSP by vars and cons
+    else:
+        switch_csp = 0
+        n_var = 0
+        domains = []
+        # getting domains from user
+        while line != 'end':
+            line = input('Define it by vector or by range? (write end to terminate)\n')
+            if line[0] == 'v':
+                line = input('Define the domain of var x_' + str(n_var) + ':\n')
+                domains.append(eval(line))
+            elif line[0] == 'e' or line[0] == 'E':
+                break
+            else:
+                a = int(input('Lower-included bound:\n'))
+                b = int(input('Upper-excluded bound:\n'))
+                domains.append(range(a, b))
+        # getting constraints from user
     for x in [3, 4, 6, 2001]:
         print('AC' + str(x) + ':')
         m = Model(x)
-        switch_csp = 9
         if switch_csp == 0:
-            x0 = m.add_var(list(range(1,14)))
-            x1 = m.add_var(list(range(5,16)))
-            x2 = m.add_var(list(range(11,16)))
-            x3 = m.add_var(list(range(5,25)))
-            m.add_constr(x0, x1, 'x < (y-4)')
-            m.add_constr(x1, x2, 'x > y')
-            m.add_constr(x2, x3, 'x < y')
-            m.add_constr(x0, x3, 'x != y')
-        elif switch_csp == 2:
-            x0 = m.add_var(list(range(0,4)))
-            x1 = m.add_var(list(range(0,4)))
-            m.add_constr(x0, x1, 'x+y > 4')
-        else:
-            n = 8
+            for domain in domains:
+                m.add_var(domain)
+        # vars and constraints for n-queens problem
+        elif switch_csp == 1:
             for i in range(n):
                 m.add_var(list(range(n)))
             for i in range((n-1)):
                 for j in range((i+1), n):
                     a = j-i
                     m.add_constr(m.variables[i], m.variables[j], "x != y and x != (y-" +str(a) + ')' + " and x != (y+"+str(a) + ')')
-                    #m.add_constr(m.variables[i], m.variables[j], "x != (y-"+str(a) + ')')
-                    #m.add_constr(m.variables[i], m.variables[j], "x != (y+"+str(a) + ')')
-
-        #m.filter_all()
-        #vars_domain = m.variables
-        #print('Filtered domains:')
-        #for var in vars_domain:
-        #    print(str(var.name) + "'s domain: " + str(var.domain))
-        vars_sol = m.find_solution()
-        print('Proposed solution:')
-        for var in vars_sol:
-            print(str(var.name) + " = " + str(var.domain))
-
+        if not switch_csp == 3:
+            m.filter_all()
+            vars_domain = m.variables
+            print('Filtered domains:')
+            for var in vars_domain:
+                print(str(var.name) + "'s domain: " + str(var.domain))
+        m.find_solution()

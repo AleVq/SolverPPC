@@ -4,6 +4,7 @@ import numpy as np
 
 # x: in its domain we look for a new support
 # y: its value b needs a new support
+# used by AC-6 and AC-2001
 def exists_support(c, x, a, y, b):
     next_val = np.where(x.domain > a)
     if len(next_val[0]) > 0:
@@ -15,14 +16,15 @@ def exists_support(c, x, a, y, b):
     return None
 
 
+# print domains of variables related to constraint c
 def print_domains(c):
     print(str(c.x.name) + ' domain ' + str(c.x.domain))
     print(str(c.y.name) + ' domain ' + str(c.y.domain))
 
 
+# evaluating the constraint's expression
 def consistent(x, y, expr):
-    result = eval(expr)
-    return result
+    return eval(expr)
 
 
 class AC3(Constraint):
@@ -64,8 +66,8 @@ class AC4(Constraint):
                     if len(self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])]) == 0:
                         couple[0].remove_value(couple[1])
 
-    def __init__(self, x, y, type, table=None):
-        super(AC4, self).__init__(x, y, type, table)
+    def __init__(self, x, y, type):
+        super(AC4, self).__init__(x, y, type)
         self.values_pairs = self.initialize()
 
     def initialize(self):
@@ -99,8 +101,8 @@ class AC4(Constraint):
 
 class AC6(Constraint):
 
-    def __init__(self, x, y, type, table=None):
-        super(AC6, self).__init__(x, y, type, table)
+    def __init__(self, x, y, type):
+        super(AC6, self).__init__(x, y, type)
         self.values_pairs = self.initialize()
 
     def initialize(self):
@@ -158,8 +160,8 @@ class AC2001(Constraint):
                         self.last[i][2] == new_support[0]
                         self.last[i][3] == new_support[1]
 
-    def __init__(self, x, y, type, table=None):
-        super(AC2001, self).__init__(x, y, type, table)
+    def __init__(self, x, y, type):
+        super(AC2001, self).__init__(x, y, type)
         self.last = []  # last: dict of type {x, a, y, b}, where <y,b> is the last support of <x,a>
         self.initialize()
 

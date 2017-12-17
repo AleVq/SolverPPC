@@ -1,5 +1,4 @@
 import numpy as np
-from src.Propagation import Propagation
 
 
 class Variable:
@@ -14,9 +13,7 @@ class Variable:
         self.constraints = np.array([[]])
 
     def is_in_domain(self, a):
-        if a in self.domain:
-            return True
-        return False
+        return a in self.domain
 
     def remove_value(self, a):
         if self.is_in_domain(a):

@@ -7,7 +7,6 @@ from src.AC import AC2001
 import numpy as np
 from src.Propagation import Queue
 import time
-import sys
 
 
 def char_range(c1, c2):
@@ -98,59 +97,27 @@ class Model:
                     c.initialize()
         return []  # all values are inconsistent, must go back
 
+    def print_filtered_domains(self):
+            self.propagation.run(self.variables)  # (vars)
+            print('Filtered domains:')
+            for var in self.variables:
+                print(str(var.name) + "'s domain: " + str(var.domain))
+
     def filter_all(self):
-            return self.propagation.run(self.variables)  # (vars)
+        return self.propagation.run(self.variables)
 
 
 if __name__ == '__main__':
-    line = input("Do you want to evaluate this solver with the n-queens problem?\n")
-    n = 0
-    # defining n-queens parameters
-    if line[0] == 'y' or line[0] == 'Y':
-        switch_csp = 1
-        while not line.isdigit():
-            # print('how many queens would you like to have?')
-            line = input('how many queens would you like to have? \n')
-            if not line.isdigit():
-                print("please, enter a number")
-        n = int(line)
-        print('Ok, working on ' + line + '-queens problem...')
-    # defining CSP by vars and cons
-    else:
-        switch_csp = 0
-        n_var = 0
-        domains = []
-        # getting domains from user
-        while line != 'end':
-            line = input('Define it by vector or by range? (write end to terminate)\n')
-            if line[0] == 'v':
-                line = input('Define the domain of var x_' + str(n_var) + ':\n')
-                domains.append(eval(line))
-            elif line[0] == 'e' or line[0] == 'E':
-                break
-            else:
-                a = int(input('Lower-included bound:\n'))
-                b = int(input('Upper-excluded bound:\n'))
-                domains.append(range(a, b))
-        # getting constraints from user
     for x in [3, 4, 6, 2001]:
         print('AC' + str(x) + ':')
         m = Model(x)
-        if switch_csp == 0:
-            for domain in domains:
-                m.add_var(domain)
         # vars and constraints for n-queens problem
-        elif switch_csp == 1:
-            for i in range(n):
-                m.add_var(list(range(n)))
-            for i in range((n-1)):
-                for j in range((i+1), n):
-                    a = j-i
-                    m.add_constr(m.variables[i], m.variables[j], "x != y and x != (y-" +str(a) + ')' + " and x != (y+"+str(a) + ')')
-        if not switch_csp == 3:
-            m.filter_all()
-            vars_domain = m.variables
-            print('Filtered domains:')
-            for var in vars_domain:
-                print(str(var.name) + "'s domain: " + str(var.domain))
+        n = 8
+        for i in range(n):
+            m.add_var(list(range(n)))
+        for i in range((n-1)):
+            for j in range((i+1), n):
+                a = j-i
+                m.add_constr(m.variables[i], m.variables[j], "x != y and x != (y-" +str(a) + ')' + " and x != (y+"+str(a) + ')')
+        m.print_filtered_domains()
         m.find_solution()

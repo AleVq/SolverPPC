@@ -10,16 +10,10 @@ def exists_support(c, x, a, y, b):
     if len(next_val[0]) > 0:
         domain = x.domain[next_val[0][0]:]
         for v in domain:
-                # we know that y = c.x, x = c.y
+            # we know that y = c.x, x = c.y
             if v != a and consistent(b, v, c.type):
                 return [x, v]
     return None
-
-
-# print domains of variables related to constraint c
-def print_domains(c):
-    print(str(c.x.name) + ' domain ' + str(c.x.domain))
-    print(str(c.y.name) + ' domain ' + str(c.y.domain))
 
 
 # evaluating the constraint's expression
@@ -56,15 +50,6 @@ class AC3(Constraint):
 
 
 class AC4(Constraint):
-    def filter_from(self, x):
-        for a in x.delta:
-            key = str(x.name) + ', ' + str(a)
-            if key in self.values_pairs.keys():
-                for couple in self.values_pairs[key]:
-                    if [x, a] in self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])]:
-                        self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])].remove([x, a])
-                    if len(self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])]) == 0:
-                        couple[0].remove_value(couple[1])
 
     def __init__(self, x, y, type):
         super(AC4, self).__init__(x, y, type)
@@ -76,7 +61,7 @@ class AC4(Constraint):
         pairs = {}
         for x in [self.x, self.y]:
             for v in x.domain:
-                pairs[str(x.name)+', '+str(v)] = []
+                pairs[str(x.name) + ', ' + str(v)] = []
                 total = 0
                 if x == self.x:
                     y = self.y
@@ -93,10 +78,20 @@ class AC4(Constraint):
                         total += 1
                         if not [y, w] in pairs[str(x.name) + ', ' + str(v)]:
                             pairs[str(x.name) + ', ' + str(v)].append([y, w])
-                counter[str(x.name)+', '+str(v)] = total
-                if counter[str(x.name)+', '+str(v)] == 0:
+                counter[str(x.name) + ', ' + str(v)] = total
+                if counter[str(x.name) + ', ' + str(v)] == 0:
                     x.remove_value(v)
         return pairs
+
+    def filter_from(self, x):
+        for a in x.delta:
+            key = str(x.name) + ', ' + str(a)
+            if key in self.values_pairs.keys():
+                for couple in self.values_pairs[key]:
+                    if [x, a] in self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])]:
+                        self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])].remove([x, a])
+                    if len(self.values_pairs[str(couple[0].name) + ', ' + str(couple[1])]) == 0:
+                        couple[0].remove_value(couple[1])
 
 
 class AC6(Constraint):
@@ -110,7 +105,7 @@ class AC6(Constraint):
         pairs = {}  # dict of couples: {'x, v': int}
         for x in [self.x, self.y]:
             for v in x.domain:
-                pairs[str(x.name)+', '+str(v)] = []
+                pairs[str(x.name) + ', ' + str(v)] = []
                 if x == self.x:
                     y = self.y
                     inverse = False
@@ -149,17 +144,6 @@ class AC6(Constraint):
 
 class AC2001(Constraint):
 
-    def filter_from(self, x):
-        for a in x.delta:
-            for i in range(len(self.last)):
-                if self.last[i][2] == x and self.last[i][3] == a:
-                    new_support = exists_support(self, x, a, self.last[i][0], self.last[i][1])
-                    if new_support is None:
-                        self.last[i][0].remove_value(self.last[i][1])
-                    else:
-                        self.last[i][2] == new_support[0]
-                        self.last[i][3] == new_support[1]
-
     def __init__(self, x, y, type):
         super(AC2001, self).__init__(x, y, type)
         self.last = []  # last: dict of type {x, a, y, b}, where <y,b> is the last support of <x,a>
@@ -185,3 +169,14 @@ class AC2001(Constraint):
                     break
             if not found:
                 self.y.remove_value(w)
+
+    def filter_from(self, x):
+        for a in x.delta:
+            for i in range(len(self.last)):
+                if self.last[i][2] == x and self.last[i][3] == a:
+                    new_support = exists_support(self, x, a, self.last[i][0], self.last[i][1])
+                    if new_support is None:
+                        self.last[i][0].remove_value(self.last[i][1])
+                    else:
+                        self.last[i][2] == new_support[0]
+                        self.last[i][3] == new_support[1]

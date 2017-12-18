@@ -13,7 +13,9 @@ class Variable:
         self.constraints = np.array([[]])
 
     def is_in_domain(self, a):
-        return a in self.domain
+        if self.domain.shape[0] == 0:
+            return False
+        return self.domain[0] <= a <= self.domain[self.domain.shape[0] - 1]
 
     def remove_value(self, a):
         if self.is_in_domain(a):

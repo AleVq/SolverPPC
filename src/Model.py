@@ -23,7 +23,7 @@ class Model:
         self.propagation = Propagation()
         self.alg_ac = alg_ac
 
-    # domain, delta: list
+    # domain: list
     def add_var(self, domain):
         self.variables = np.append(self.variables, Variable('x'+str(self.variables.shape[0]), np.array(domain), self.propagation))
         return self.variables[self.variables.shape[0]-1]
@@ -40,21 +40,18 @@ class Model:
             self.constraints = np.append(self.constraints, AC2001(x, y, type))
         self.propagation.update_constraints_graph(self.constraints[self.constraints.shape[0]-1])
 
-    def get_var(self, name):
-        return self.variables[int(name[1])]
-
+    # returns first solution found by using backtracking
     def find_solution(self):
         q = Queue()
         q.enqueue(self.variables)
         start = time.time()
         result = self.backtrack()
         end = time.time()
-        print('Time to find solution with backtrack: ' + str(end - start) + ' seconds.')
         if result == []:
             print('No feasible solution')
         else:
-            for variables in result:
-                print(str(variables.name) + " = " + str(variables.domain))
+            print('Solution with AC' + str(self.alg_ac) + ': ' + str([item.domain[0] for item in self.variables])
+                  + ', computed in ' + str("{0:.3f}".format(end-start)) + ' seconds')
 
     def all_labelled(self):
         res = 0
@@ -67,6 +64,7 @@ class Model:
     def backtrack(self):
         if self.all_labelled():
             return self.variables
+        x = self.variables[0]
         for var in self.variables:
             if not var.label:
                 x = var

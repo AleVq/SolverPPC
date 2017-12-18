@@ -10,7 +10,7 @@ def exists_support(c, x, a, y, b):
     if len(next_val[0]) > 0:
         domain = x.domain[next_val[0][0]:]
         for v in domain:
-            # we know that y = c.x, x = c.y
+                # we know that y = c.x, x = c.y
             if v != a and consistent(b, v, c.type):
                 return [x, v]
     return None
@@ -61,7 +61,7 @@ class AC4(Constraint):
         pairs = {}
         for x in [self.x, self.y]:
             for v in x.domain:
-                pairs[str(x.name) + ', ' + str(v)] = []
+                pairs[str(x.name)+', '+str(v)] = []
                 total = 0
                 if x == self.x:
                     y = self.y
@@ -78,8 +78,8 @@ class AC4(Constraint):
                         total += 1
                         if not [y, w] in pairs[str(x.name) + ', ' + str(v)]:
                             pairs[str(x.name) + ', ' + str(v)].append([y, w])
-                counter[str(x.name) + ', ' + str(v)] = total
-                if counter[str(x.name) + ', ' + str(v)] == 0:
+                counter[str(x.name)+', '+str(v)] = total
+                if counter[str(x.name)+', '+str(v)] == 0:
                     x.remove_value(v)
         return pairs
 
@@ -105,7 +105,7 @@ class AC6(Constraint):
         pairs = {}  # dict of couples: {'x, v': int}
         for x in [self.x, self.y]:
             for v in x.domain:
-                pairs[str(x.name) + ', ' + str(v)] = []
+                pairs[str(x.name)+', '+str(v)] = []
                 if x == self.x:
                     y = self.y
                     inverse = False
@@ -180,3 +180,13 @@ class AC2001(Constraint):
                     else:
                         self.last[i][2] == new_support[0]
                         self.last[i][3] == new_support[1]
+
+
+
+
+
+
+
+
+
+

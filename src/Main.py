@@ -5,7 +5,7 @@ if __name__ == '__main__':
     for x in [3, 4, 6, 2001]:
         m = Model(x)
         n = 8
-        for i in range(a,i):
+        for i in range(n):
             m.add_var(list(range(n)))
         for i in range((n-1)):
             for j in range((i+1), n):

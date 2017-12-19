@@ -6,18 +6,18 @@ in order to find a solution to a given CSP problem. We can choose among AC3, AC4
 In order to use this library it's sufficient to import the class Model, create an object of type Model,
 defining variables and constraints. At last, we can call the method print_filtered_domains() to get the 
 consistent domains or, if we want a solution to the problem, we can call the method find_solution().
-Here's the example present in the file /src/Main.py:
+Here's the example of 8-queens present in the file /src/Main.py:
 ```python
 if __name__ == '__main__':
     # params of the constructor: 3 for AC3, 4 for AC4..
     m = Model(2001)
     # vars and constraints for n-queens problem
     n = 8
+    # to define a variable we only define its domain here, 
+    # defined by a vector (of any data type which supports comparison operators)
+    # variables' names are managed by the API itself 
+    # by naming the first inserted var x_0, the second x_1 and so on
     for i in range(n):
-        # to define a variable we only define its domain here, 
-        # defined by a vector (of any data type which supports comparison operators)
-        # variables' names are managed by the API itself 
-        # by naming the first inserted var x_0, the second x_1 and so on
         m.add_var(list(range(n)))
     # To add a constraint, we must give first var, second var and the type of constraint,
     # i.e. a string in which:

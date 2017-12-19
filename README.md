@@ -15,7 +15,7 @@ if __name__ == '__main__':
     n = 8
     for i in range(n):
         # to define a variable we only define its domain here, 
-        # defined by a vector (of ints, floats, chars or strings)
+        # defined by a vector (of any data type which supports comparison operators)
         # variables' names are managed by the API itself 
         # by naming the first inserted var x_0, the second x_1 and so on
         m.add_var(list(range(n)))

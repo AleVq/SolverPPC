@@ -18,7 +18,7 @@ if __name__ == '__main__':
         # variables' names are managed by the API itself 
         # by naming the first inserted var x_0, the second x_1 and so on
         m.add_var(list(range(n)))
-    # To add a constraint, we must give the first and second variable and the type of constraint,
+    # To add a constraint, we must give first var, second var and the type of constraint,
     # which is a string in which:
     # x must be used as a reference to the first constraint's variable,
     # y must be used as a reference to the second constraint's variable,

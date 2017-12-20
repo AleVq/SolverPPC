@@ -14,7 +14,9 @@ if __name__ == '__main__':
     # vars and constraints for n-queens problem
     n = 8
     # to define a variable we only define its domain here, 
-    # defined by a vector (of any data type which supports comparison operators)
+    # defined by a vector (of any data type which supports comparison operators),
+    # for integer-based domains the function range(n) can be used
+    # for char-based domains the function char_range('a', 'e') can be used
     # variables' names are managed by the API itself 
     # by naming the first inserted var x_0, the second x_1 and so on
     for i in range(n):
@@ -33,3 +35,4 @@ if __name__ == '__main__':
     m.print_filtered_domains()
     m.find_solution()
 ```
+About complexity, we can see with the example of the n-queens that backtrack using the AC3 algorithm is the fastest, since it doesn't have to reinitialize the structures used by the others AC at each backtrack step. Among the other AC algorithms, AC4 is the slowest by far, followed by AC6. AC2001 is the fastest AC with uses an additional structure.

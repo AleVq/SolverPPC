@@ -53,7 +53,7 @@ if __name__ == '__main__':
     m.find_solution()
 ```
 ## About complexity 
-We can see with the example of the n-queens that backtrack using the AC3 algorithm is the fastest, since it doesn't have to reinitialize the structures used by the others AC at each backtrack step. Among the other AC algorithms, AC4 is the slowest by far, followed by AC6. AC2001 is the fastest AC with uses an additional structure.
+The example of the n-queens show that the AC3-based backtrack algorithm is the fastest, since it doesn't have to reinitialize the structures used by the others AC at each backtrack step. Among the other AC algorithms, AC4 is the slowest by far, followed by AC6. AC2001 is the fastest AC with uses an additional structure.
 
 Here is an example on how the different ACs behave on the nqueens problem for 2<=n<=16:
 

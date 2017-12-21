@@ -72,4 +72,5 @@ It contains the methods needed to progagate the domain-related changes to all va
 The source file AC.py contains all AC classes, which ereditate from the Constraint class. Each AC class contains the algorithm *filter_from(x)* which do the filtering of the constraint by basing itself on which variable had its domain changed.
 
 We can get an high-level idea of the solver's structure by using a class diagram:
+
 ![Image of Classes](https://github.com/AleVq/SolverPPC/blob/master/class_diagram.png)

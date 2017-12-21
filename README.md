@@ -69,7 +69,7 @@ It contains the basic constraint-related data.
 ### Class Propagation 
 It contains the methods needed to progagate the domain-related changes to all variables and constraints.
 ### Classes AC\*
-The source file AC.py contains all AC classes, which ereditate from the Constraint class. Each AC class contains the algorithm *filter_from(x)* which do the filtering of the constraint by basing itself on which variable had its domain changed.
+The source file AC.py contains all AC classes, which ereditate from the Constraint class. Each AC class contains the algorithm *filter_from(x)* which do the filtering for the single constraint by basing itself on which variable had its domain changed.
 
 We can get an high-level idea of the solver's structure by using a class diagram:
 

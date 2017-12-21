@@ -1,11 +1,14 @@
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.Model import Model
-import pandas as pd
-import numpy as np
 from src.Model import char_range
+import numpy as np
+import pandas as pd
 
 
 if __name__ == '__main__':
-    upper_bound = 16
+    upper_bound = 20
     measure = np.zeros((4, upper_bound-1)).tolist()
     for n in range(2, upper_bound+1):
         acs = [3, 4, 6, 2001]

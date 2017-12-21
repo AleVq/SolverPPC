@@ -28,7 +28,7 @@ class Model:
         self.variables = np.append(self.variables, Variable('x'+str(self.variables.shape[0]), np.array(domain), self.propagation))
         return self.variables[self.variables.shape[0]-1]
 
-    # x, y: Variable, type: String
+    # x, y: Variable, type: str
     def add_constr(self, x, y, type):
         if self.alg_ac == 3:
             self.constraints = np.append(self.constraints, AC3(x, y, type))

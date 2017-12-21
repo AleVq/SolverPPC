@@ -9,8 +9,6 @@ class Variable:
         self.domain = np.array(domain)
         self.delta = np.array([]).astype(int)
         self.propagation = propagation
-        # list of couples <constraintType, variable>
-        self.constraints = np.array([[]])
 
     def is_in_domain(self, a):
         if self.domain.shape[0] == 0:

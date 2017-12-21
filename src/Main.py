@@ -1,10 +1,15 @@
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import src
 from src.Model import Model
 from src.Model import char_range
+
 
 if __name__ == '__main__':
     for x in [3, 4, 6, 2001]:
         m = Model(x)
-        n = 16
+        n = 8
         for i in range(n):
             m.add_var(list(range(n)))
         for i in range((n-1)):

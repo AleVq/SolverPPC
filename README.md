@@ -31,7 +31,7 @@ Variables' names are managed by the API itself, by naming the first inserted var
 
 By defing the type of constraint, we are free to use expression like "x^2 > (y+2*3/4) and x != y", i.e. Python math and logical operators are allowed (\*\* for power). For more details, please refer to Python's *eval* function.
 
-Here's the example of 8-queens present in the file /src/Main.py:
+Here's the example of 8-queens that can be found in file /src/Main.py:
 ```python
 if __name__ == '__main__':
     # params of the constructor: 3 for AC3, 4 for AC4..

@@ -48,10 +48,11 @@ class Model:
         result = self.backtrack()
         end = time.time()
         if result == []:
-            print('No feasible solution')
+            print('No feasible solution with AC' + str(self.alg_ac))
         else:
             print('Solution with AC' + str(self.alg_ac) + ': ' + str([item.domain[0] for item in self.variables])
                   + ', computed in ' + str("{0:.3f}".format(end-start)) + ' seconds')
+        return end-start
 
     def all_labelled(self):
         res = 0

@@ -40,4 +40,4 @@ About complexity, we can see with the example of the n-queens that backtrack usi
 Here is an example on how the different ACs behave on the nqueens problem for 2<=n<=16:
 
 ![Image of Performance]
-(https://github.com/AleVq/SolverPPC/blob/master/results.eps)
+(https://github.com/AleVq/SolverPPC/blob/master/results.png)

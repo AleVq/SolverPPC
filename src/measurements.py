@@ -5,7 +5,7 @@ from src.Model import char_range
 
 
 if __name__ == '__main__':
-    upper_bound = 16
+    upper_bound = 8
     measure = np.zeros((4, upper_bound-1)).tolist()
     for n in range(2, upper_bound+1):
         acs = [3, 4, 6, 2001]
@@ -24,6 +24,6 @@ if __name__ == '__main__':
     ax.set_xlabel('numer of queens')
     ax.set_ylabel('time to find sol')
     fig = ax.get_figure()
-    fig.savefig('../results.eps', format='eps')
+    fig.savefig('../results.eps', format('eps'), figsize=(20,10))
     fig = ax.get_figure()
     print(measure)

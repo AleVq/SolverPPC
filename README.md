@@ -53,7 +53,7 @@ if __name__ == '__main__':
     m.find_solution()
 ```
 ## About complexity 
-The example of the n-queens show that the AC3-based backtrack algorithm is the fastest, since it doesn't have to reinitialize the structures used by the others AC at each backtrack step. Among the other AC algorithms, AC4 is the slowest by far, followed by AC6. AC2001 is the fastest AC with uses an additional structure.
+The example of the n-queens shows that the AC3-based backtrack algorithm is the fastest, since it doesn't have to reinitialize the structures used by the others AC at each backtrack step. Among the other AC algorithms, AC4 is the slowest by far, followed by AC6. AC2001 is the fastest among the AC which uses an additional structure.
 
 Here is an example on how the different ACs behave on the nqueens problem for 2<=n<=16:
 
@@ -63,7 +63,7 @@ Here is an example on how the different ACs behave on the nqueens problem for 2<
 ### Class Model
 It's the hub of the library. The model contains all variables, constraints, the algorithm to find the consistent domains and the algorithm of backtrack.
 ### Class Variable
-It contains the variable-related data and the methods of domain and delta update needed during the filtering.
+It contains the variable-related data and the methods to update the domain and the delta set, needed during the filtering.
 ### Class Constraint
 It contains the basic constraint-related data. 
 ### Class Propagation 

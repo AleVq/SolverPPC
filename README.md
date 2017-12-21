@@ -27,8 +27,9 @@ Variables' names are managed by the API itself, by naming the first inserted var
  * the type of constraint, i.e. a string in which:
     - x must be used as a reference to the first constraint's variable,
     - y must be used as a reference to the second constraint's variable,
-    - accepted operators are: >, =>, <, =<, !=, ==,
-By defing the type of constraint, we are free to use expression like "x^2 > y+2*3/4 and x != y", i.e. Python math and logical operators are allowed (** for power).
+    - accepted operators are: >, =>, <, =<, !=, ==.
+
+By defing the type of constraint, we are free to use expression like "x^2 > (y+2*3/4) and x != y", i.e. Python math and logical operators are allowed (\*\* for power). For more details, please refer to Python's *eval* function.
 
 Here's the example of 8-queens present in the file /src/Main.py:
 ```python
@@ -37,10 +38,11 @@ if __name__ == '__main__':
     m = Model(2001)
     # vars and constraints for n-queens problem
     n = 8
-   
+    # here all domains are [0,1..n-1]
     for i in range(n):
         m.add_var(list(range(n)))
-        
+    # thanks to the support of logical operators, we can compress different constraints
+    # involving the same two variables in one single constraint
     for i in range((n-1)):
         for j in range((i+1), n):
             a = j-i
@@ -54,3 +56,6 @@ We can see with the example of the n-queens that backtrack using the AC3 algorit
 Here is an example on how the different ACs behave on the nqueens problem for 2<=n<=16:
 
 ![Image of Performance](https://github.com/AleVq/SolverPPC/blob/master/results.png)
+
+## How the library is structured
+

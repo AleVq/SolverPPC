@@ -8,7 +8,7 @@ import pandas as pd
 
 
 if __name__ == '__main__':
-    upper_bound = 20
+    upper_bound = 16
     measure = np.zeros((4, upper_bound-1)).tolist()
     for n in range(2, upper_bound+1):
         acs = [3, 4, 6, 2001]

@@ -13,6 +13,14 @@ In order to use this library it's sufficient to
 * we can call the method print_filtered_domains() to get the consistent domains obtained by using the AC algorithm,
 * we can call the method find_solution(), if we want to get a solution of the problem, if it exists.
 
+This library uses NumPy's arrays. In the file Measurements.py Pandas' DataFrame structure is used in order to plot the performance-related data.
+
+A run of the Main.py file can be done from terminal. Here's an example:
+```shell
+$ cd /Home/SolverPPC/src/
+$ python Main.py
+```
+
 ### Defining variables
 To define a variable we need only define its domain here.
 Domains are defined by an ordered vector (of any data type which supports comparison operators, such as int, float, chars, strings).

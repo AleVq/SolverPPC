@@ -42,6 +42,9 @@ class Model:
 
     # returns first solution found by using backtracking
     def find_solution(self):
+        if self.variables.shape[0] < 2:
+            print('Minimum number of variables: 2')
+            return False
         q = Queue()
         q.enqueue(self.variables)
         start = time.time()
@@ -103,4 +106,7 @@ class Model:
                 print(str(var.name) + "'s domain: " + str(var.domain))
 
     def filter_all(self):
+        if self.variables.shape[0] < 2:
+            print('Minimum number of variables: 2')
+            return False
         return self.propagation.run(self.variables)

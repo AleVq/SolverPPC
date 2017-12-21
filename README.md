@@ -46,7 +46,9 @@ if __name__ == '__main__':
     for i in range((n-1)):
         for j in range((i+1), n):
             a = j-i
-            m.add_constr(m.variables[i], m.variables[j], "x != y and x != (y-" +str(a) + ')' + " and x != (y+"+str(a) + ')')
+            m.add_constr(m.variables[i], m.variables[j], "x != y 
+                                                       and x != (y-" +str(a) + ')' + 
+                                                      " and x != (y+"+str(a) + ')')
     m.print_filtered_domains()
     m.find_solution()
 ```
@@ -58,4 +60,13 @@ Here is an example on how the different ACs behave on the nqueens problem for 2<
 ![Image of Performance](https://github.com/AleVq/SolverPPC/blob/master/results.png)
 
 ## How the library is structured
-
+### Class Model
+It's the hub of the library. The model contains all variables, constraints, the algorithm to find the consistent domains and the algorithm of backtrack.
+### Class Variable
+It contains the variable-related data and the methods of domain and delta update needed during the filtering.
+### Class Constraint
+It contains the basic constraint-related data. 
+### Class Propagation 
+It contains the methods needed to progagate the domain-related changes to all variables and constraints.
+### Class AC
+It contains all AC algorithms, which ereditate from the Constraint class. Each AC class contains the algorithm *filter_from(x)* which do the filtering of the constraint by basing itself on which variable had its domain changed.

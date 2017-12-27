@@ -9,7 +9,7 @@ from src.Model import char_range
 if __name__ == '__main__':
     for x in [3, 4, 6, 2001]:
         m = Model(x)
-        n = 10
+        n = 24
         for i in range(n):
             m.add_var(list(range(n)))
         for i in range((n-1)):
